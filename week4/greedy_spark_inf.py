@@ -17,10 +17,6 @@ with open("graph/nc_mini.json", "r") as graph_data:
 ####################################################################################
 nodes_set = NC_digraph.nodes()
 
-
-
-
-
 def cascade(init_nodes, nodes_set_broadcast):#, dist_d):
     nodes_set = nodes_set_broadcast.value
     action = {}
