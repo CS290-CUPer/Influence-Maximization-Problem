@@ -93,8 +93,7 @@ def run_greedy(nodes_set, N, num):
     print result
     plt.plot(result)
 
-if __name__ == '__main__':
-    run_greedy(nodes_set, 100, 10)
+run_greedy(nodes_set, 100, 10)
 # nodes_set = NC_digraph.nodes()
 # init_nodes = np.random.choice(NC_digraph.nodes(), 1)[0]
 #print kNodesMaxGreedy(nodes_set, 200, 3)
