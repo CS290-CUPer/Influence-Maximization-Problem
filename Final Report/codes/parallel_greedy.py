@@ -9,12 +9,18 @@ import findspark
 findspark.init('/usr/local/opt/apache-spark/libexec')
 import pyspark
 sc = pyspark.SparkContext()
+
 with open("graph/nc_mini.json", "r") as graph_data:
     graph_data = json.load(graph_data)
     NC_digraph = json_graph.node_link_graph(graph_data)
     
     
-####################################################################################
+######################################################################################
+#
+#Influence Function Implementation
+#
+#######################################################################################
+
 nodes_set = NC_digraph.nodes()
 
 def cascade(init_nodes, nodes_set_broadcast):#, dist_d):
@@ -54,6 +60,8 @@ def influence_function(N, init_nodes, partition_num):
     activated_num_rdd = sc.parallelize([init_nodes]*N, partition_num)
     activated_num = activated_num_rdd.map(lambda x: cascade(x, nodes_set_broadcast)).reduce(lambda x, y: x+y)
     return activated_num/N
+####################################################################################
+
 
 def singleNodeMaxGreedy(nodes_set, N, curr_nodes):
     result = []
@@ -77,9 +85,9 @@ def kNodesMaxGreedy(nodes_set, N, K):
         tmp = singleNodeMaxGreedy(nodes_set, N, curr_nodes)
         curr_nodes = curr_nodes + [tmp]
         nodes_set.remove(tmp)
-    
+
     max_influence = influence_function(N, curr_nodes, 4)
-    #print curr_nodes    
+    #print curr_nodes
     return (curr_nodes, max_influence)
 
 #function to run multiple times of greedy algorithm
@@ -93,7 +101,8 @@ def run_greedy(nodes_set, N, num):
     print result
     plt.plot(result)
 
-run_greedy(nodes_set, 100, 10)
+if __name__ == '__main__':
+    run_greedy(nodes_set, 100, 1)
 # nodes_set = NC_digraph.nodes()
 # init_nodes = np.random.choice(NC_digraph.nodes(), 1)[0]
 #print kNodesMaxGreedy(nodes_set, 200, 3)
